@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- ignore Windows -->
+    <Match>
+        <Bug pattern="VA_FORMAT_STRING_USES_NEWLINE"/>
+    </Match>
+
+    <!-- ignore serialization -->
+    <Match>
+        <Bug code="Se"/>
+    </Match>
+</FindBugsFilter>
