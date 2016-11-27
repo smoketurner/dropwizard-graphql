@@ -15,8 +15,7 @@
  */
 package com.smoketurner.dropwizard.graphql;
 
-import java.util.Objects;
-import javax.annotation.Nonnull;
+import graphql.servlet.GraphQLServlet;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -24,18 +23,6 @@ import io.dropwizard.setup.Environment;
 
 public abstract class GraphQLBundle<C extends Configuration>
         implements ConfiguredBundle<C>, GraphQLConfiguration<C> {
-
-    private final String serviceName;
-
-    /**
-     * Constructor
-     *
-     * @param serviceName
-     *            service name
-     */
-    public GraphQLBundle(@Nonnull final String serviceName) {
-        this.serviceName = Objects.requireNonNull(serviceName);
-    }
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
@@ -45,6 +32,8 @@ public abstract class GraphQLBundle<C extends Configuration>
     @Override
     public void run(final C configuration, final Environment environment)
             throws Exception {
-        final GraphQLFactory graphqlConfig = getGraphQLFactory(configuration);
+        final GraphQLServlet servlet = getGraphQLFactory(configuration).build();
+        environment.servlets().addServlet("graphql", servlet)
+                .addMapping("/graphql", "/schema.json");
     }
 }

@@ -15,6 +15,18 @@
  */
 package com.smoketurner.dropwizard.graphql;
 
+import java.util.concurrent.atomic.AtomicReference;
+import graphql.servlet.GraphQLServlet;
+
 public class GraphQLFactory {
 
+    private final AtomicReference<GraphQLServlet> instance = new AtomicReference<>();
+
+    public GraphQLServlet build() {
+        final GraphQLServlet servlet = new GraphQLServlet();
+        if (instance.compareAndSet(null, servlet)) {
+            return servlet;
+        }
+        return instance.get();
+    }
 }

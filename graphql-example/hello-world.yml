@@ -1,0 +1,28 @@
+template: Hello, %s!
+defaultName: Stranger
+
+# HTTP-specific options.
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: 8888
+
+  requestLog:
+    appenders:
+      - type: console
+        timeZone: UTC
+        target: stdout
+
+logging:
+  level: INFO
+  loggers:
+    com.smoketurner.dropwizard.graphql: DEBUG
+    com.example.helloworld: DEBUG
+    graphql: DEBUG
+  appenders:
+    - type: console
+      timeZone: UTC
+      target: stdout

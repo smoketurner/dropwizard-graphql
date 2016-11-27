@@ -27,11 +27,11 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <file.encoding>UTF-8</file.encoding>
         <dropwizard.version>1.0.5</dropwizard.version>
-        <graphql.version>2.2.0</graphql.version>
     </properties>
 
     <modules>
         <module>graphql-core</module>
+        <module>graphql-example</module>
     </modules>
 
     <developers>
@@ -102,14 +102,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java</artifactId>
-            <version>${graphql.version}</version>
-        </dependency>
-    </dependencies>
 
     <profiles>
         <profile>
@@ -212,7 +204,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
-                    <outputDirectory />
+                    <outputDirectory/>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -320,7 +312,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <DependencyConvergence />
+                                <DependencyConvergence/>
                             </rules>
                         </configuration>
                         <goals>
