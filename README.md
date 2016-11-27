@@ -35,13 +35,10 @@ public void initialize(Bootstrap<MyConfiguration> bootstrap) {
 
 @Override
 public void run(MyConfiguration configuration, Environment environment) throws Exception {
-    Brave brave = configuration.getGraphQLFactory().build(environment);
+    final GraphQLServlet servlet = configuration.getGraphQLFactory().build();
+    servlet.bindQueryProvider(provider);
 }
 ```
-
-Configuration
--------------
-TBD
 
 Example Application
 -------------------
@@ -62,7 +59,7 @@ mvn clean package
 java -jar graphql-example/target/graphql-example-1.0.5-1.jar server graphql-example/hello-world.yml
 ```
 
-This will start the application on port `8080` (admin port `8180`).
+This will start the application on port `8888`. You can then install [GraphiQL](https://github.com/graphql/graphiql/tree/master/example) and modify [line 113](https://github.com/graphql/graphiql/blob/master/example/index.html#L113) to point to `http://127.0.0.1:8888/graphql` to be able to test out your API.
 
 Support
 -------
