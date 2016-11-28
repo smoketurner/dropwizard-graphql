@@ -25,6 +25,7 @@ import com.smoketurner.dropwizard.graphql.GraphQLBundle;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import graphql.servlet.GraphQLServlet;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -49,6 +50,7 @@ public class HelloWorldApplication
                 return configuration.getGraphQLFactory();
             }
         });
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/"));
     }
 
     @Override
