@@ -1,3 +1,11 @@
+<!--
+ *  Copyright (c) 2015, Facebook, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the license found in the
+ *  LICENSE file in the root directory of this source tree.
+ *
+-->
 <!DOCTYPE html>
 <html>
   <head>
@@ -13,18 +21,39 @@
       }
     </style>
 
+    <!--
+      This GraphiQL example depends on Promise and fetch, which are available in
+      modern browsers, but can be "polyfilled" for older browsers.
+      GraphiQL itself depends on React DOM.
+      If you do not want to rely on a CDN, you can host these files locally or
+      include them directly in your favored resource bunder.
+    -->
     <script src="//cdn.jsdelivr.net/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
     <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
     <script src="//cdn.jsdelivr.net/react/15.3.2/react.min.js"></script>
     <script src="//cdn.jsdelivr.net/react/15.3.2/react-dom.min.js"></script>
 
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/graphiql/0.8.0/graphiql.css" />
-    <script src="//cdn.jsdelivr.net/graphiql/0.8.0/graphiql.min.js"></script>
+    <!--
+      These two files can be found in the npm module, however you may wish to
+      copy them directly into your environment, or perhaps include them in your
+      favored resource bundler.
+     -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/graphiql/0.8.1/graphiql.css" />
+    <script src="//cdn.jsdelivr.net/graphiql/0.8.1/graphiql.min.js"></script>
 
   </head>
   <body>
     <div id="graphiql">Loading...</div>
     <script>
+
+      /**
+       * This GraphiQL example illustrates how to use some of GraphiQL's props
+       * in order to enable reading and updating the URL parameters, making
+       * link sharing of queries a little bit easier.
+       *
+       * This is only one example of this kind of feature, GraphiQL exposes
+       * various React params to enable interesting integrations.
+       */
 
       // Parse the search string to get url parameters.
       var search = window.location.search;
@@ -75,9 +104,13 @@
         history.replaceState(null, null, newSearch);
       }
 
-      // Defines a GraphQL fetcher using the fetch API.
+      // Defines a GraphQL fetcher using the fetch API. You're not required to
+      // use fetch, and could instead implement graphQLFetcher however you like,
+      // as long as it returns a Promise or Observable.
       function graphQLFetcher(graphQLParams) {
-        return fetch('http://127.0.0.1:8080/graphql', {
+        // This example expects a GraphQL server at the path /graphql.
+        // Change this to point wherever you host your GraphQL server.
+        return fetch('http://127.0.0.1:8888/graphql', {
           method: 'post',
           headers: {
             'Accept': 'application/json',
@@ -97,6 +130,9 @@
       }
 
       // Render <GraphiQL /> into the body.
+      // See the README in the top level of this module to learn more about
+      // how you can customize GraphiQL by providing different values or
+      // additional child elements.
       ReactDOM.render(
         React.createElement(GraphiQL, {
           fetcher: graphQLFetcher,
