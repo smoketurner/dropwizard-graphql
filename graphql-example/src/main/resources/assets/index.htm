@@ -1,10 +1,9 @@
 <!--
- *  Copyright (c) 2015, Facebook, Inc.
+ *  Copyright (c) Facebook, Inc.
  *  All rights reserved.
  *
  *  This source code is licensed under the license found in the
  *  LICENSE file in the root directory of this source tree.
- *
 -->
 <!DOCTYPE html>
 <html>
@@ -30,8 +29,8 @@
     -->
     <script src="//cdn.jsdelivr.net/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
     <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
-    <script src="//cdn.jsdelivr.net/react/15.3.2/react.min.js"></script>
-    <script src="//cdn.jsdelivr.net/react/15.3.2/react-dom.min.js"></script>
+    <script src="//cdn.jsdelivr.net/react/15.4.2/react.min.js"></script>
+    <script src="//cdn.jsdelivr.net/react/15.4.2/react-dom.min.js"></script>
 
     <!--
       These two files can be found in the npm module, however you may wish to
@@ -110,7 +109,7 @@
       function graphQLFetcher(graphQLParams) {
         // This example expects a GraphQL server at the path /graphql.
         // Change this to point wherever you host your GraphQL server.
-        return fetch('http://127.0.0.1:8888/graphql', {
+        return fetch('http://127.0.0.1:8080/graphql', {
           method: 'post',
           headers: {
             'Accept': 'application/json',
