@@ -13,13 +13,13 @@ Dependency Info
 <dependency>
     <groupId>com.smoketurner.dropwizard</groupId>
     <artifactId>graphql-core</artifactId>
-    <version>1.0.5-1</version>
+    <version>1.0.6-1</version>
 </dependency>
 ```
 
 Usage
 -----
-Add a `GraphQLBundle` to your [Application](http://www.dropwizard.io/1.0.5/dropwizard-core/apidocs/io/dropwizard/Application.html) class.
+Add a `GraphQLBundle` to your [Application](http://www.dropwizard.io/1.0.6/dropwizard-core/apidocs/io/dropwizard/Application.html) class.
 
 ```java
 @Override
@@ -42,13 +42,13 @@ public void run(MyConfiguration configuration, Environment environment) throws E
 
 Example Application
 -------------------
-This bundle includes a modified version of the `HelloWorldApplication` from Dropwizard's [Getting Started](http://www.dropwizard.io/1.0.5/docs/getting-started.html) documentation.
+This bundle includes a modified version of the `HelloWorldApplication` from Dropwizard's [Getting Started](http://www.dropwizard.io/1.0.6/docs/getting-started.html) documentation.
 
 ```xml
 <dependency>
     <groupId>com.smoketurner.dropwizard</groupId>
     <artifactId>graphql-example</artifactId>
-    <version>1.0.5-1</version>
+    <version>1.0.6-1</version>
 </dependency>
 ```
 
@@ -56,7 +56,7 @@ You can execute this application on your local machine then running:
 
 ```
 mvn clean package
-java -jar graphql-example/target/graphql-example-1.0.5-1.jar server graphql-example/hello-world.yml
+java -jar graphql-example/target/graphql-example-1.0.6-1.jar server graphql-example/hello-world.yml
 ```
 
 This will start the application on port `8888`. You can then install [GraphiQL](https://github.com/graphql/graphiql/tree/master/example) and modify [line 113](https://github.com/graphql/graphiql/blob/master/example/index.html#L113) to point to `http://127.0.0.1:8888/graphql` to be able to test out your API.
