@@ -37,8 +37,8 @@
       copy them directly into your environment, or perhaps include them in your
       favored resource bundler.
      -->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/graphiql/0.9.2/graphiql.css" />
-    <script src="//cdn.jsdelivr.net/graphiql/0.9.2/graphiql.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/graphiql/0.9.3/graphiql.css" />
+    <script src="//cdn.jsdelivr.net/graphiql/0.9.3/graphiql.min.js"></script>
 
   </head>
   <body>
@@ -109,7 +109,7 @@
       function graphQLFetcher(graphQLParams) {
         // This example expects a GraphQL server at the path /graphql.
         // Change this to point wherever you host your GraphQL server.
-        return fetch('http://127.0.0.1:8080/graphql', {
+        return fetch('//127.0.0.1:8080/graphql', {
           method: 'post',
           headers: {
             'Accept': 'application/json',

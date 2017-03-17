@@ -21,7 +21,7 @@
             <artifactId>dropwizard-assets</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.smoketurner.dropwizard</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>graphql-core</artifactId>
             <version>${project.version}</version>
         </dependency>

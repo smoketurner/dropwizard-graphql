@@ -23,7 +23,7 @@ import com.example.helloworld.api.SayingQueryProvider;
 import com.example.helloworld.resources.HelloWorldResource;
 import com.smoketurner.dropwizard.graphql.GraphQLBundle;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
-import graphql.servlet.GraphQLServlet;
+import graphql.servlet.OsgiGraphQLServlet;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -66,8 +66,8 @@ public class HelloWorldApplication
         final SayingQueryProvider provider = new SayingQueryProvider(
                 configuration.getTemplate(), configuration.getDefaultName());
 
-        final GraphQLServlet servlet = configuration.getGraphQLFactory()
-                .build();
+        final OsgiGraphQLServlet servlet = (OsgiGraphQLServlet) configuration
+                .getGraphQLFactory().build();
         servlet.bindQueryProvider(provider);
 
         final HelloWorldResource resource = new HelloWorldResource(

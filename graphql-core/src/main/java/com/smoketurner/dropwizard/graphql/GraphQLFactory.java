@@ -17,13 +17,14 @@ package com.smoketurner.dropwizard.graphql;
 
 import java.util.concurrent.atomic.AtomicReference;
 import graphql.servlet.GraphQLServlet;
+import graphql.servlet.OsgiGraphQLServlet;
 
 public class GraphQLFactory {
 
     private final AtomicReference<GraphQLServlet> instance = new AtomicReference<>();
 
     public GraphQLServlet build() {
-        final GraphQLServlet servlet = new GraphQLServlet();
+        final GraphQLServlet servlet = new OsgiGraphQLServlet();
         if (instance.compareAndSet(null, servlet)) {
             return servlet;
         }
