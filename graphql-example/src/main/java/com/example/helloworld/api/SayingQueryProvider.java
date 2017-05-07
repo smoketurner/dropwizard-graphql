@@ -17,31 +17,52 @@ package com.example.helloworld.api;
 
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
-import static graphql.schema.GraphQLObjectType.newObject;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLType;
+import graphql.servlet.GraphQLMutationProvider;
 import graphql.servlet.GraphQLQueryProvider;
+import graphql.servlet.GraphQLTypesProvider;
 
-public class SayingQueryProvider implements GraphQLQueryProvider {
+public class SayingQueryProvider implements GraphQLQueryProvider,
+        GraphQLMutationProvider, GraphQLTypesProvider {
 
     private final String template;
     private final String defaultName;
     private final AtomicLong counter = new AtomicLong();
 
+    /**
+     * Constructor
+     *
+     * @param template
+     * @param defaultName
+     */
     public SayingQueryProvider(String template, String defaultName) {
         this.template = template;
         this.defaultName = defaultName;
     }
 
     @Override
-    public GraphQLObjectType getQuery() {
-        return newObject().name("Saying").description("A friendly greeting")
-                .field(field -> field.type(GraphQLLong).name("id")
-                        .description("Unique ID").dataFetcher(env -> {
-                            return counter.incrementAndGet();
-                        }))
-                .field(field -> field.type(GraphQLString).name("content")
+    public Collection<GraphQLFieldDefinition> getQueries() {
+        final List<GraphQLFieldDefinition> definitions = new ArrayList<>();
+        definitions.add(GraphQLFieldDefinition.newFieldDefinition()
+                .name("saying").type(getSayingType()).build());
+        return definitions;
+    }
+
+    private GraphQLObjectType getSayingType() {
+        return GraphQLObjectType.newObject().name("Saying")
+                .description("A friendly greeting")
+                .field(f -> f.type(GraphQLLong).name("id")
+                        .description("Unique ID")
+                        .dataFetcher(env -> counter.incrementAndGet()))
+                .field(f -> f.type(GraphQLString).name("content")
                         .description("Greeting message")
                         .argument(a -> a.name("name")
                                 .description("Name to greet")
@@ -56,7 +77,12 @@ public class SayingQueryProvider implements GraphQLQueryProvider {
     }
 
     @Override
-    public Object context() {
-        return new Saying(1, "Hello Stranger!");
+    public Collection<GraphQLType> getTypes() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Collection<GraphQLFieldDefinition> getMutations() {
+        return null;
     }
 }
