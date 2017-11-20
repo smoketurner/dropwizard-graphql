@@ -18,8 +18,8 @@ package com.example.helloworld.api;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import graphql.annotations.GraphQLDescription;
-import graphql.annotations.GraphQLField;
+import graphql.annotations.annotationTypes.GraphQLDescription;
+import graphql.annotations.annotationTypes.GraphQLField;
 
 @GraphQLDescription("A friendly greeting")
 public class Saying {

@@ -19,12 +19,12 @@
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java-servlet</artifactId>
-            <version>4.1.0</version>
+            <version>4.5.0</version>
         </dependency>
         <dependency>
-            <groupId>com.graphql-java</groupId>
+            <groupId>io.github.graphql-java</groupId>
             <artifactId>graphql-java-annotations</artifactId>
-            <version>3.0.3</version>
+            <version>5.0.4</version>
         </dependency>
     </dependencies>
 </project>
