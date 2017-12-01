@@ -1,0 +1,12 @@
+schema {
+    query: QueryType
+}
+
+type QueryType {
+    saying(name: String): Saying
+}
+
+type Saying {
+    id: String
+    content: String
+}

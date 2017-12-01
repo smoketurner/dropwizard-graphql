@@ -17,14 +17,13 @@
             <artifactId>dropwizard-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java-servlet</artifactId>
-            <version>4.6.0</version>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-assets</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.github.graphql-java</groupId>
-            <artifactId>graphql-java-annotations</artifactId>
-            <version>5.0.6</version>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-servlet</artifactId>
+            <version>4.6.1</version>
         </dependency>
     </dependencies>
 </project>

@@ -19,13 +19,12 @@ import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
-import com.example.helloworld.api.SayingQueryProvider;
+import com.example.helloworld.api.SayingDataFetcher;
 import com.example.helloworld.resources.HelloWorldResource;
 import com.smoketurner.dropwizard.graphql.GraphQLBundle;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
-import graphql.servlet.OsgiGraphQLServlet;
+import graphql.schema.idl.RuntimeWiring;
 import io.dropwizard.Application;
-import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -43,14 +42,20 @@ public class HelloWorldApplication
 
     @Override
     public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
-        bootstrap.addBundle(new GraphQLBundle<HelloWorldConfiguration>() {
+        final GraphQLBundle<HelloWorldConfiguration> bundle = new GraphQLBundle<HelloWorldConfiguration>() {
             @Override
             public GraphQLFactory getGraphQLFactory(
                     HelloWorldConfiguration configuration) {
-                return configuration.getGraphQLFactory();
+
+                final GraphQLFactory factory = configuration
+                        .getGraphQLFactory();
+                // the RuntimeWiring must be configured prior to the run()
+                // methods being called so the schema is connected properly.
+                factory.setRuntimeWiring(buildWiring(configuration));
+                return factory;
             }
-        });
-        bootstrap.addBundle(new AssetsBundle("/assets/", "/"));
+        };
+        bootstrap.addBundle(bundle);
     }
 
     @Override
@@ -63,15 +68,21 @@ public class HelloWorldApplication
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true,
                 "/*");
 
-        final SayingQueryProvider provider = new SayingQueryProvider(
-                configuration.getTemplate(), configuration.getDefaultName());
-
-        final OsgiGraphQLServlet servlet = (OsgiGraphQLServlet) configuration
-                .getGraphQLFactory().build();
-        servlet.bindQueryProvider(provider);
-
         final HelloWorldResource resource = new HelloWorldResource(
                 configuration.getTemplate(), configuration.getDefaultName());
         environment.jersey().register(resource);
+    }
+
+    private RuntimeWiring buildWiring(HelloWorldConfiguration configuration) {
+
+        final SayingDataFetcher fetcher = new SayingDataFetcher(
+                configuration.getTemplate(), configuration.getDefaultName());
+
+        final RuntimeWiring wiring = RuntimeWiring.newRuntimeWiring()
+                .type("QueryType",
+                        typeWiring -> typeWiring.dataFetcher("saying", fetcher))
+                .build();
+
+        return wiring;
     }
 }

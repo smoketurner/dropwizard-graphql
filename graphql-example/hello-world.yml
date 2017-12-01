@@ -1,6 +1,9 @@
 template: Hello, %s!
 defaultName: Stranger
 
+graphql:
+  schemaFile: HelloWorld.graphqls
+
 # HTTP-specific options.
 server:
   type: simple
