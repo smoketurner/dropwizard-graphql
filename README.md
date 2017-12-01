@@ -13,42 +13,42 @@ Dependency Info
 <dependency>
     <groupId>com.smoketurner.dropwizard</groupId>
     <artifactId>graphql-core</artifactId>
-    <version>1.0.6-1</version>
+    <version>1.2.2-1</version>
 </dependency>
 ```
 
 Usage
 -----
-Add a `GraphQLBundle` to your [Application](http://www.dropwizard.io/1.0.6/dropwizard-core/apidocs/io/dropwizard/Application.html) class.
+Add a `GraphQLBundle` to your [Application](http://www.dropwizard.io/1.2.2/dropwizard-core/apidocs/io/dropwizard/Application.html) class.
 
 ```java
 @Override
 public void initialize(Bootstrap<MyConfiguration> bootstrap) {
     // ...
-    bootstrap.addBundle(new GraphQLBundle<MyConfiguration>() {
+    final GraphQLBundle<HelloWorldConfiguration> bundle = new GraphQLBundle<HelloWorldConfiguration>() {
         @Override
-        public GraphQLFactory getGraphQLFactory(MyConfiguration configuration) {
-            return configuration.getGraphQLFactory();
-        }
-    });
-}
+        public GraphQLFactory getGraphQLFactory(HelloWorldConfiguration configuration) {
 
-@Override
-public void run(MyConfiguration configuration, Environment environment) throws Exception {
-    final GraphQLServlet servlet = configuration.getGraphQLFactory().build();
-    servlet.bindQueryProvider(provider);
+            final GraphQLFactory factory = configuration.getGraphQLFactory();
+            // the RuntimeWiring must be configured prior to the run()
+            // methods being called so the schema is connected properly.
+            factory.setRuntimeWiring(buildWiring(configuration));
+            return factory;
+        }
+    };
+    bootstrap.addBundle(bundle);
 }
 ```
 
 Example Application
 -------------------
-This bundle includes a modified version of the `HelloWorldApplication` from Dropwizard's [Getting Started](http://www.dropwizard.io/1.0.6/docs/getting-started.html) documentation.
+This bundle includes a modified version of the `HelloWorldApplication` from Dropwizard's [Getting Started](http://www.dropwizard.io/1.2.2/docs/getting-started.html) documentation.
 
 ```xml
 <dependency>
     <groupId>com.smoketurner.dropwizard</groupId>
     <artifactId>graphql-example</artifactId>
-    <version>1.0.6-1</version>
+    <version>1.2.2-1</version>
 </dependency>
 ```
 
@@ -56,7 +56,7 @@ You can execute this application on your local machine then running:
 
 ```
 mvn clean package
-java -jar graphql-example/target/graphql-example-1.0.6-1.jar server graphql-example/hello-world.yml
+java -jar graphql-example/target/graphql-example-1.2.2-1.jar server graphql-example/hello-world.yml
 ```
 
 This will start the application on port `8080` with a [GraphiQL](https://github.com/graphql/graphiql) interface for exploring the API. 
