@@ -18,10 +18,7 @@ package com.example.helloworld.api;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import graphql.annotations.GraphQLDescription;
-import graphql.annotations.GraphQLField;
 
-@GraphQLDescription("A friendly greeting")
 public class Saying {
     private final long id;
 
@@ -35,15 +32,11 @@ public class Saying {
         this.content = content;
     }
 
-    @GraphQLField
-    @GraphQLDescription("Unique ID")
     @JsonProperty
     public long getId() {
         return id;
     }
 
-    @GraphQLField
-    @GraphQLDescription("Greeting message")
     @JsonProperty
     public String getContent() {
         return content;

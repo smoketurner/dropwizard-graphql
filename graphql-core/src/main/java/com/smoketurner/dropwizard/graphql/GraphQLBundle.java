@@ -15,9 +15,12 @@
  */
 package com.smoketurner.dropwizard.graphql;
 
+import graphql.schema.GraphQLSchema;
 import graphql.servlet.GraphQLServlet;
+import graphql.servlet.SimpleGraphQLServlet;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -26,13 +29,18 @@ public abstract class GraphQLBundle<C extends Configuration>
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
-        // nothing to initialize
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/"));
     }
 
     @Override
     public void run(final C configuration, final Environment environment)
             throws Exception {
-        final GraphQLServlet servlet = getGraphQLFactory(configuration).build();
+        final GraphQLFactory factory = getGraphQLFactory(configuration);
+
+        final GraphQLSchema schema = factory.build();
+        final GraphQLServlet servlet = new SimpleGraphQLServlet(schema,
+                factory.getExecutionStrategy());
+
         environment.servlets().addServlet("graphql", servlet)
                 .addMapping("/graphql", "/schema.json");
     }

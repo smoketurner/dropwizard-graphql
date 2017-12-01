@@ -1,18 +1,29 @@
 sudo: false
 dist: trusty
 language: java
-jdk:
-  - oraclejdk8
+before_install:
+  - ulimit -c unlimited -S
+  - mvn -N io.takari:maven:wrapper
 after_success:
   - bash .travis_after_success.sh
 cache:
   directories:
     - $HOME/.m2
 
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
+matrix:
+  include:
+    - os: linux
+      jdk: oraclejdk8
+      addons:
+        apt:
+          packages:
+            - oracle-java8-installer
+    - os: linux
+      jdk: oraclejdk9
+      addons:
+        apt:
+          packages:
+            - oracle-java9-installer
 
 env:
   global:
