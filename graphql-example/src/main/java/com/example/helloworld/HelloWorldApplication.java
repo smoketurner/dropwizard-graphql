@@ -79,7 +79,7 @@ public class HelloWorldApplication
                 configuration.getTemplate(), configuration.getDefaultName());
 
         final RuntimeWiring wiring = RuntimeWiring.newRuntimeWiring()
-                .type("QueryType",
+                .type("Query",
                         typeWiring -> typeWiring.dataFetcher("saying", fetcher))
                 .build();
 

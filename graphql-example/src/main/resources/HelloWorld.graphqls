@@ -1,12 +1,12 @@
 schema {
-    query: QueryType
+    query: Query
 }
 
-type QueryType {
+type Query {
     saying(name: String): Saying
 }
 
 type Saying {
-    id: Long
-    content: String
+    id: Long!
+    content: String!
 }

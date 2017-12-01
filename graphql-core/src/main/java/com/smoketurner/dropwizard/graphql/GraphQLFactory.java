@@ -29,6 +29,9 @@ import graphql.execution.AsyncSerialExecutionStrategy;
 import graphql.execution.ExecutionStrategy;
 import graphql.execution.SubscriptionExecutionStrategy;
 import graphql.execution.batched.BatchedExecutionStrategy;
+import graphql.execution.instrumentation.ChainedInstrumentation;
+import graphql.execution.instrumentation.Instrumentation;
+import graphql.execution.instrumentation.tracing.TracingInstrumentation;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
@@ -47,6 +50,10 @@ public class GraphQLFactory {
 
     @NotNull
     private List<String> blockedFields = Collections.emptyList();
+
+    @NotNull
+    private List<Instrumentation> instrumentations = Collections
+            .singletonList(new TracingInstrumentation());
 
     @NotNull
     private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
@@ -100,6 +107,16 @@ public class GraphQLFactory {
     @JsonProperty
     public void setBlockedFields(final List<String> fields) {
         this.blockedFields = fields;
+    }
+
+    @JsonIgnore
+    public ChainedInstrumentation getInstrumentations() {
+        return new ChainedInstrumentation(instrumentations);
+    }
+
+    @JsonIgnore
+    public void setInstrumentations(List<Instrumentation> instrumentations) {
+        this.instrumentations = instrumentations;
     }
 
     public GraphQLSchema build() throws Exception {

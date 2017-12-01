@@ -16,6 +16,7 @@
 package com.smoketurner.dropwizard.graphql;
 
 import graphql.schema.GraphQLSchema;
+import graphql.servlet.DefaultExecutionStrategyProvider;
 import graphql.servlet.GraphQLServlet;
 import graphql.servlet.SimpleGraphQLServlet;
 import io.dropwizard.Configuration;
@@ -39,7 +40,12 @@ public abstract class GraphQLBundle<C extends Configuration>
 
         final GraphQLSchema schema = factory.build();
         final GraphQLServlet servlet = new SimpleGraphQLServlet(schema,
-                factory.getExecutionStrategy());
+                new DefaultExecutionStrategyProvider(
+                        factory.getExecutionStrategy()),
+                null /* objectMapperConfigurer */, null /* listeners */,
+                factory.getInstrumentations(), null /* errorHandler */,
+                null /* contextBuilder */, null /* rootObjectBuilder */,
+                null /* preparsedDocumentProvider */);
 
         environment.servlets().addServlet("graphql", servlet)
                 .addMapping("/graphql", "/schema.json");
