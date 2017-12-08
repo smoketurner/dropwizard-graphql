@@ -73,7 +73,8 @@ public class HelloWorldApplication
         environment.jersey().register(resource);
     }
 
-    private RuntimeWiring buildWiring(HelloWorldConfiguration configuration) {
+    private static RuntimeWiring buildWiring(
+            HelloWorldConfiguration configuration) {
 
         final SayingDataFetcher fetcher = new SayingDataFetcher(
                 configuration.getTemplate(), configuration.getDefaultName());

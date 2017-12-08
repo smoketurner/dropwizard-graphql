@@ -37,6 +37,7 @@ import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
+import graphql.schema.idl.errors.SchemaProblem;
 import io.dropwizard.validation.OneOf;
 
 public class GraphQLFactory {
@@ -119,7 +120,7 @@ public class GraphQLFactory {
         this.instrumentations = instrumentations;
     }
 
-    public GraphQLSchema build() throws Exception {
+    public GraphQLSchema build() throws SchemaProblem, URISyntaxException {
         final SchemaParser parser = new SchemaParser();
         final TypeDefinitionRegistry registry = parser.parse(getSchemaFile());
 
