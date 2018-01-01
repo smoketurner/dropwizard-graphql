@@ -59,7 +59,7 @@ mvn clean package
 java -jar graphql-example/target/graphql-example-1.2.2-1.jar server graphql-example/hello-world.yml
 ```
 
-This will start the application on port `8080` with a [GraphiQL](https://github.com/graphql/graphiql) interface for exploring the API. 
+This will start the application on port `8080` with a [GraphiQL](https://github.com/graphql/graphiql) interface for exploring the API.
 
 Support
 -------
@@ -67,7 +67,7 @@ Please file bug reports and feature requests in [GitHub issues](https://github.c
 
 License
 -------
-Copyright (c) 2017 Smoke Turner, LLC
+Copyright (c) 2018 Smoke Turner, LLC
 
 This library is licensed under the Apache License, Version 2.0.
 
