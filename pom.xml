@@ -27,7 +27,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <file.encoding>UTF-8</file.encoding>
         <javadoc.doclint.none>-Xdoclint:none</javadoc.doclint.none>
-        <dropwizard.version>1.2.2</dropwizard.version>
+        <dropwizard.version>1.2.3</dropwizard.version>
     </properties>
 
     <modules>
@@ -104,7 +104,7 @@
             <dependency>
                 <groupId>com.graphql-java</groupId>
                 <artifactId>graphql-java</artifactId>
-                <version>6.0</version>
+                <version>7.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
