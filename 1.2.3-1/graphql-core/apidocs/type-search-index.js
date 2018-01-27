@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"com.smoketurner.dropwizard.graphql","l":"GraphQLBundle"},{"p":"com.smoketurner.dropwizard.graphql","l":"GraphQLConfiguration"},{"p":"com.smoketurner.dropwizard.graphql","l":"GraphQLFactory"}]
