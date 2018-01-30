@@ -13,7 +13,7 @@ Dependency Info
 <dependency>
     <groupId>com.smoketurner.dropwizard</groupId>
     <artifactId>graphql-core</artifactId>
-    <version>1.2.3-1</version>
+    <version>1.2.3-2</version>
 </dependency>
 ```
 
@@ -48,7 +48,7 @@ You can execute this application on your local machine then running:
 
 ```
 ./mvnw clean package
-java -jar graphql-example/target/graphql-example-1.2.3-2-SNAPSHOT.jar server graphql-example/hello-world.yml
+java -jar graphql-example/target/graphql-example-1.2.3-3-SNAPSHOT.jar server graphql-example/hello-world.yml
 ```
 
 This will start the application on port `8080` with a [GraphiQL](https://github.com/graphql/graphiql) interface for exploring the API.
