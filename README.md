@@ -4,7 +4,7 @@ Dropwizard GraphQL Bundle
 [![Coverage Status](https://coveralls.io/repos/smoketurner/dropwizard-graphql/badge.svg)](https://coveralls.io/r/smoketurner/dropwizard-graphql)
 [![Maven Central](https://img.shields.io/maven-central/v/com.smoketurner.dropwizard/dropwizard-graphql.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.smoketurner.dropwizard/dropwizard-graphql/)
 [![GitHub license](https://img.shields.io/github/license/smoketurner/dropwizard-graphql.svg?style=flat-square)](https://github.com/smoketurner/dropwizard-graphql/tree/master)
-[![Become a Patron](https://img.shields.io/badge/Patron-Patreon-red.svg)](https://www.patreon.com/jplock)
+[![Become a Patron](https://img.shields.io/badge/Patron-Patreon-red.svg)](https://www.patreon.com/bePatron?u=9567343)
 
 A bundle for providing [GraphQL](http://graphql.org) API endpoints in Dropwizard applications.
 
