@@ -61,8 +61,10 @@ public class GraphQLFactory {
             .build();
 
     @JsonProperty
-    public File getSchemaFile() throws URISyntaxException {
-        return new File(Resources.getResource(schemaFile).toURI());
+    public BufferedReader getSchemaFile() throws URISyntaxException {
+        InputStream in = getClass().getClassLoader().getResourceAsStream(schemaFile);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        return reader;
     }
 
     @JsonProperty
