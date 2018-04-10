@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import java.io.BufferedReader;
 import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
