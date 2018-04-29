@@ -15,6 +15,15 @@
  */
 package com.smoketurner.dropwizard.graphql;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import graphql.execution.AsyncExecutionStrategy;
@@ -32,14 +41,6 @@ import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 import graphql.schema.idl.errors.SchemaProblem;
 import io.dropwizard.validation.OneOf;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.List;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotEmpty;
 
 public class GraphQLFactory {
 
@@ -63,8 +64,10 @@ public class GraphQLFactory {
 
     @JsonProperty
     public BufferedReader getSchemaFile() throws URISyntaxException {
-        InputStream in = getClass().getClassLoader().getResourceAsStream(schemaFile);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        final InputStream in = getClass().getClassLoader()
+                .getResourceAsStream(schemaFile);
+        final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(in, StandardCharsets.UTF_8));
         return reader;
     }
 
