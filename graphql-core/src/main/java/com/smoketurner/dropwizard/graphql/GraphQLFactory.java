@@ -18,11 +18,13 @@ package com.smoketurner.dropwizard.graphql;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -63,12 +65,8 @@ public class GraphQLFactory {
             .build();
 
     @JsonProperty
-    public BufferedReader getSchemaFile() throws URISyntaxException {
-        final InputStream in = getClass().getClassLoader()
-                .getResourceAsStream(schemaFile);
-        final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(in, StandardCharsets.UTF_8));
-        return reader;
+    public BufferedReader getSchemaFile() {
+        return getResourceAsBufferedReader(schemaFile);
     }
 
     @JsonProperty
@@ -126,7 +124,7 @@ public class GraphQLFactory {
         this.instrumentations = instrumentations;
     }
 
-    public GraphQLSchema build() throws SchemaProblem, URISyntaxException {
+    public GraphQLSchema build() throws SchemaProblem {
         final SchemaParser parser = new SchemaParser();
         final TypeDefinitionRegistry registry = parser.parse(getSchemaFile());
 
@@ -134,5 +132,12 @@ public class GraphQLFactory {
         final GraphQLSchema schema = generator.makeExecutableSchema(registry,
                 runtimeWiring);
         return schema;
+    }
+
+    private static BufferedReader getResourceAsBufferedReader(final String resourceName) {
+        final ClassLoader loader = MoreObjects.firstNonNull(Thread.currentThread().getContextClassLoader(), GraphQLFactory.class.getClassLoader());
+        final InputStream resourceAsStream = loader.getResourceAsStream(resourceName);
+        Preconditions.checkArgument(resourceAsStream != null, "resource %s not found.", resourceName);
+        return new BufferedReader(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
     }
 }
