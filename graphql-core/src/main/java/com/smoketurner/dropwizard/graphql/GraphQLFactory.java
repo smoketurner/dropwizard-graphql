@@ -22,17 +22,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.execution.AsyncSerialExecutionStrategy;
 import graphql.execution.ExecutionStrategy;
 import graphql.execution.SubscriptionExecutionStrategy;
-import graphql.execution.batched.BatchedExecutionStrategy;
 import graphql.execution.instrumentation.ChainedInstrumentation;
 import graphql.execution.instrumentation.Instrumentation;
 import graphql.execution.instrumentation.tracing.TracingInstrumentation;
@@ -50,7 +48,7 @@ public class GraphQLFactory {
     private String schemaFile = "";
 
     @NotEmpty
-    @OneOf({ "async", "async_serial", "subscription", "batched" })
+    @OneOf({ "async", "async_serial", "subscription" })
     private String executionStrategy = "async";
 
     @NotNull
@@ -77,8 +75,6 @@ public class GraphQLFactory {
     @JsonProperty
     public ExecutionStrategy getExecutionStrategy() {
         switch (executionStrategy) {
-        case "batched":
-            return new BatchedExecutionStrategy();
         case "async_serial":
             return new AsyncSerialExecutionStrategy();
         case "subscription":
@@ -134,10 +130,19 @@ public class GraphQLFactory {
         return schema;
     }
 
-    private static BufferedReader getResourceAsBufferedReader(final String resourceName) {
-        final ClassLoader loader = MoreObjects.firstNonNull(Thread.currentThread().getContextClassLoader(), GraphQLFactory.class.getClassLoader());
-        final InputStream resourceAsStream = loader.getResourceAsStream(resourceName);
-        Preconditions.checkArgument(resourceAsStream != null, "resource %s not found.", resourceName);
-        return new BufferedReader(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
+    private static BufferedReader getResourceAsBufferedReader(
+            final String resourceName) {
+        final ClassLoader loader = MoreObjects.firstNonNull(
+                Thread.currentThread().getContextClassLoader(),
+                GraphQLFactory.class.getClassLoader());
+
+        final InputStream resourceAsStream = loader
+                .getResourceAsStream(resourceName);
+
+        Preconditions.checkArgument(resourceAsStream != null,
+                "resource %s not found.", resourceName);
+
+        return new BufferedReader(new InputStreamReader(resourceAsStream,
+                StandardCharsets.UTF_8));
     }
 }
