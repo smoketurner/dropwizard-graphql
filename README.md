@@ -14,13 +14,13 @@ Dependency Info
 <dependency>
     <groupId>com.smoketurner.dropwizard</groupId>
     <artifactId>graphql-core</artifactId>
-    <version>1.3.0-1</version>
+    <version>1.3.2-1</version>
 </dependency>
 ```
 
 Usage
 -----
-Add a `GraphQLBundle` to your [Application](http://www.dropwizard.io/1.3.0/dropwizard-core/apidocs/io/dropwizard/Application.html) class.
+Add a `GraphQLBundle` to your [Application](http://www.dropwizard.io/1.3.2/dropwizard-core/apidocs/io/dropwizard/Application.html) class.
 
 ```java
 @Override
@@ -43,13 +43,13 @@ public void initialize(Bootstrap<MyConfiguration> bootstrap) {
 
 Example Application
 -------------------
-This bundle includes a modified version of the `HelloWorldApplication` from Dropwizard's [Getting Started](http://www.dropwizard.io/1.3.0/docs/getting-started.html) documentation.
+This bundle includes a modified version of the `HelloWorldApplication` from Dropwizard's [Getting Started](http://www.dropwizard.io/1.3.2/docs/getting-started.html) documentation.
 
 You can execute this application on your local machine then running:
 
 ```
 ./mvnw clean package
-java -jar graphql-example/target/graphql-example-1.3.0-2-SNAPSHOT.jar server graphql-example/hello-world.yml
+java -jar graphql-example/target/graphql-example-1.3.2-2-SNAPSHOT.jar server graphql-example/hello-world.yml
 ```
 
 This will start the application on port `8080` with a [GraphiQL](https://github.com/graphql/graphiql) interface for exploring the API.
