@@ -1,11 +1,11 @@
-/**
- * Copyright 2018 Smoke Turner, LLC.
+/*
+ * Copyright © 2018 Smoke Turner, LLC (contact@smoketurner.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,14 +15,6 @@
  */
 package com.smoketurner.dropwizard.graphql;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.List;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
@@ -41,108 +33,107 @@ import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 import graphql.schema.idl.errors.SchemaProblem;
 import io.dropwizard.validation.OneOf;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class GraphQLFactory {
 
-    @NotEmpty
-    private String schemaFile = "";
+  @NotEmpty private String schemaFile = "";
 
-    @NotEmpty
-    @OneOf({ "async", "async_serial", "subscription" })
-    private String executionStrategy = "async";
+  @NotEmpty
+  @OneOf({"async", "async_serial", "subscription"})
+  private String executionStrategy = "async";
 
-    @NotNull
-    private List<String> blockedFields = Collections.emptyList();
+  @NotNull private List<String> blockedFields = Collections.emptyList();
 
-    @NotNull
-    private List<Instrumentation> instrumentations = Collections
-            .singletonList(new TracingInstrumentation());
+  @NotNull
+  private List<Instrumentation> instrumentations =
+      Collections.singletonList(new TracingInstrumentation());
 
-    @NotNull
-    private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
-            .build();
+  @NotNull private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
 
-    @JsonProperty
-    public BufferedReader getSchemaFile() {
-        return getResourceAsBufferedReader(schemaFile);
+  @JsonProperty
+  public BufferedReader getSchemaFile() {
+    return getResourceAsBufferedReader(schemaFile);
+  }
+
+  @JsonProperty
+  public void setSchemaFile(final String file) {
+    this.schemaFile = file;
+  }
+
+  @JsonProperty
+  public ExecutionStrategy getExecutionStrategy() {
+    switch (executionStrategy) {
+      case "async_serial":
+        return new AsyncSerialExecutionStrategy();
+      case "subscription":
+        return new SubscriptionExecutionStrategy();
+      case "async":
+      default:
+        return new AsyncExecutionStrategy();
     }
+  }
 
-    @JsonProperty
-    public void setSchemaFile(final String file) {
-        this.schemaFile = file;
-    }
+  @JsonProperty
+  public void setExecutionStrategy(final String strategy) {
+    this.executionStrategy = strategy;
+  }
 
-    @JsonProperty
-    public ExecutionStrategy getExecutionStrategy() {
-        switch (executionStrategy) {
-        case "async_serial":
-            return new AsyncSerialExecutionStrategy();
-        case "subscription":
-            return new SubscriptionExecutionStrategy();
-        case "async":
-        default:
-            return new AsyncExecutionStrategy();
-        }
-    }
+  @JsonIgnore
+  public RuntimeWiring getRuntimeWiring() {
+    return runtimeWiring;
+  }
 
-    @JsonProperty
-    public void setExecutionStrategy(final String strategy) {
-        this.executionStrategy = strategy;
-    }
+  @JsonIgnore
+  public void setRuntimeWiring(final RuntimeWiring wiring) {
+    this.runtimeWiring = wiring;
+  }
 
-    @JsonIgnore
-    public RuntimeWiring getRuntimeWiring() {
-        return runtimeWiring;
-    }
+  @JsonProperty
+  public List<String> getBlockedFields() {
+    return blockedFields;
+  }
 
-    @JsonIgnore
-    public void setRuntimeWiring(final RuntimeWiring wiring) {
-        this.runtimeWiring = wiring;
-    }
+  @JsonProperty
+  public void setBlockedFields(final List<String> fields) {
+    this.blockedFields = fields;
+  }
 
-    @JsonProperty
-    public List<String> getBlockedFields() {
-        return blockedFields;
-    }
+  @JsonIgnore
+  public ChainedInstrumentation getInstrumentations() {
+    return new ChainedInstrumentation(instrumentations);
+  }
 
-    @JsonProperty
-    public void setBlockedFields(final List<String> fields) {
-        this.blockedFields = fields;
-    }
+  @JsonIgnore
+  public void setInstrumentations(List<Instrumentation> instrumentations) {
+    this.instrumentations = instrumentations;
+  }
 
-    @JsonIgnore
-    public ChainedInstrumentation getInstrumentations() {
-        return new ChainedInstrumentation(instrumentations);
-    }
+  public GraphQLSchema build() throws SchemaProblem {
+    final SchemaParser parser = new SchemaParser();
+    final TypeDefinitionRegistry registry = parser.parse(getSchemaFile());
 
-    @JsonIgnore
-    public void setInstrumentations(List<Instrumentation> instrumentations) {
-        this.instrumentations = instrumentations;
-    }
+    final SchemaGenerator generator = new SchemaGenerator();
+    final GraphQLSchema schema = generator.makeExecutableSchema(registry, runtimeWiring);
+    return schema;
+  }
 
-    public GraphQLSchema build() throws SchemaProblem {
-        final SchemaParser parser = new SchemaParser();
-        final TypeDefinitionRegistry registry = parser.parse(getSchemaFile());
+  private static BufferedReader getResourceAsBufferedReader(final String resourceName) {
+    final ClassLoader loader =
+        MoreObjects.firstNonNull(
+            Thread.currentThread().getContextClassLoader(), GraphQLFactory.class.getClassLoader());
 
-        final SchemaGenerator generator = new SchemaGenerator();
-        final GraphQLSchema schema = generator.makeExecutableSchema(registry,
-                runtimeWiring);
-        return schema;
-    }
+    final InputStream resourceAsStream = loader.getResourceAsStream(resourceName);
 
-    private static BufferedReader getResourceAsBufferedReader(
-            final String resourceName) {
-        final ClassLoader loader = MoreObjects.firstNonNull(
-                Thread.currentThread().getContextClassLoader(),
-                GraphQLFactory.class.getClassLoader());
+    Preconditions.checkArgument(resourceAsStream != null, "resource %s not found.", resourceName);
 
-        final InputStream resourceAsStream = loader
-                .getResourceAsStream(resourceName);
-
-        Preconditions.checkArgument(resourceAsStream != null,
-                "resource %s not found.", resourceName);
-
-        return new BufferedReader(new InputStreamReader(resourceAsStream,
-                StandardCharsets.UTF_8));
-    }
+    return new BufferedReader(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
+  }
 }
