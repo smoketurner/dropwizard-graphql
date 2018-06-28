@@ -1,11 +1,11 @@
-/**
- * Copyright 2018 Smoke Turner, LLC.
+/*
+ * Copyright © 2018 Smoke Turner, LLC (contact@smoketurner.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,5 +19,5 @@ import io.dropwizard.Configuration;
 
 @FunctionalInterface
 public interface GraphQLConfiguration<C extends Configuration> {
-    GraphQLFactory getGraphQLFactory(C configuration);
+  GraphQLFactory getGraphQLFactory(C configuration);
 }
