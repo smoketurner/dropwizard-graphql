@@ -43,14 +43,4 @@
         <url>https://github.com/smoketurner/dropwizard-graphql</url>
         <tag>HEAD</tag>
     </scm>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.graphql-java</groupId>
-                <artifactId>graphql-java</artifactId>
-                <version>9.0</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 </project>
