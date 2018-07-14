@@ -1,7 +1,6 @@
 Dropwizard GraphQL Bundle
 ========================
 [![Build Status](https://travis-ci.org/smoketurner/dropwizard-graphql.svg?branch=master)](https://travis-ci.org/smoketurner/dropwizard-graphql)
-[![Coverage Status](https://coveralls.io/repos/github/smoketurner/dropwizard-graphql/badge.svg?branch=master)](https://coveralls.io/github/smoketurner/dropwizard-graphql?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/com.smoketurner.dropwizard/dropwizard-graphql.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.smoketurner.dropwizard/dropwizard-graphql/)
 [![GitHub license](https://img.shields.io/github/license/smoketurner/dropwizard-graphql.svg?style=flat-square)](https://github.com/smoketurner/dropwizard-graphql/tree/master)
 [![Become a Patron](https://img.shields.io/badge/Patron-Patreon-red.svg)](https://www.patreon.com/bePatron?u=9567343)

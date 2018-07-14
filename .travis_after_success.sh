@@ -5,8 +5,6 @@ if [[ "${TRAVIS_JDK_VERSION}" != "oraclejdk8" ]]; then
     exit
 fi
 
-./mvnw -B cobertura:cobertura coveralls:report
-
 if [[ -n ${TRAVIS_TAG} ]]; then
     echo "Skipping deployment for tag \"${TRAVIS_TAG}\""
     exit
@@ -22,4 +20,4 @@ if [[ "$TRAVIS_PULL_REQUEST" = "true" ]]; then
     exit
 fi
 
-./mvnw -B deploy --settings maven_deploy_settings.xml -Dmaven.test.skip=true -Dfindbugs.skip=true
+./mvnw -B deploy --settings maven_deploy_settings.xml -Dmaven.test.skip=true
