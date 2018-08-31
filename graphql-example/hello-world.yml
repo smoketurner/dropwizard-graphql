@@ -18,7 +18,9 @@ template: Hello, %s!
 defaultName: Stranger
 
 graphql:
-  schemaFile: HelloWorld.graphqls
+  enableTracing: false
+  schemaFiles:
+  - HelloWorld.graphql
 
 # HTTP-specific options.
 server:
