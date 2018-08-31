@@ -18,7 +18,7 @@ package com.smoketurner.dropwizard.graphql;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.execution.AsyncSerialExecutionStrategy;
 import graphql.execution.ExecutionStrategy;
@@ -37,35 +37,54 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GraphQLFactory {
 
-  @NotEmpty private String schemaFile = "";
+  private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLFactory.class);
+
+  /** @deprecated Please use {@link schemaFiles} instead */
+  @Deprecated() private String schemaFile = "";
+
+  @NotNull private List<String> schemaFiles = new ArrayList<>();
 
   @NotEmpty
   @OneOf({"async", "async_serial", "subscription"})
   private String executionStrategy = "async";
 
-  @NotNull private List<String> blockedFields = Collections.emptyList();
+  private boolean enableTracing = true;
 
-  @NotNull
-  private List<Instrumentation> instrumentations =
-      Collections.singletonList(new TracingInstrumentation());
+  private List<Instrumentation> instrumentations = new ArrayList<>();
 
-  @NotNull private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
+  private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
 
+  @Deprecated
   @JsonProperty
-  public BufferedReader getSchemaFile() {
-    return getResourceAsBufferedReader(schemaFile);
+  public String getSchemaFile() {
+    return schemaFile;
+  }
+
+  @Deprecated
+  @JsonProperty
+  public void setSchemaFile(final String file) {
+    schemaFile = file;
   }
 
   @JsonProperty
-  public void setSchemaFile(final String file) {
-    this.schemaFile = file;
+  public List<String> getSchemaFiles() {
+    return schemaFiles;
+  }
+
+  @JsonProperty
+  public void setSchemaFiles(List<String> files) {
+    schemaFiles = Optional.ofNullable(files).orElseGet(ArrayList::new);
   }
 
   @JsonProperty
@@ -83,7 +102,7 @@ public class GraphQLFactory {
 
   @JsonProperty
   public void setExecutionStrategy(final String strategy) {
-    this.executionStrategy = strategy;
+    executionStrategy = strategy;
   }
 
   @JsonIgnore
@@ -93,17 +112,20 @@ public class GraphQLFactory {
 
   @JsonIgnore
   public void setRuntimeWiring(final RuntimeWiring wiring) {
-    this.runtimeWiring = wiring;
+    runtimeWiring = wiring;
   }
 
   @JsonProperty
-  public List<String> getBlockedFields() {
-    return blockedFields;
+  public boolean isEnableTracing() {
+    return enableTracing;
   }
 
   @JsonProperty
-  public void setBlockedFields(final List<String> fields) {
-    this.blockedFields = fields;
+  public void setEnableTracing(boolean enabled) {
+    enableTracing = enabled;
+    if (enabled) {
+      instrumentations.add(new TracingInstrumentation());
+    }
   }
 
   @JsonIgnore
@@ -113,27 +135,48 @@ public class GraphQLFactory {
 
   @JsonIgnore
   public void setInstrumentations(List<Instrumentation> instrumentations) {
-    this.instrumentations = instrumentations;
+    this.instrumentations = Optional.ofNullable(instrumentations).orElseGet(ArrayList::new);
   }
 
   public GraphQLSchema build() throws SchemaProblem {
     final SchemaParser parser = new SchemaParser();
-    final TypeDefinitionRegistry registry = parser.parse(getSchemaFile());
+    final TypeDefinitionRegistry registry = new TypeDefinitionRegistry();
+
+    if (!Strings.isNullOrEmpty(schemaFile)) {
+      schemaFiles.add(schemaFile);
+    }
+
+    if (!schemaFiles.isEmpty()) {
+      schemaFiles
+          .stream()
+          .filter(f -> !Strings.isNullOrEmpty(f))
+          .map(f -> getResourceAsReader(f))
+          .map(r -> parser.parse(r))
+          .forEach(p -> registry.merge(p));
+    }
 
     final SchemaGenerator generator = new SchemaGenerator();
     final GraphQLSchema schema = generator.makeExecutableSchema(registry, runtimeWiring);
     return schema;
   }
 
-  private static BufferedReader getResourceAsBufferedReader(final String resourceName) {
+  /**
+   * Return a resource file name as a BufferedReader
+   *
+   * @param name Resource file name
+   * @return BufferedReader for the file
+   */
+  private static BufferedReader getResourceAsReader(final String name) {
+    LOGGER.info("Loading GraphQL schema file: {}", name);
+
     final ClassLoader loader =
         MoreObjects.firstNonNull(
             Thread.currentThread().getContextClassLoader(), GraphQLFactory.class.getClassLoader());
 
-    final InputStream resourceAsStream = loader.getResourceAsStream(resourceName);
+    final InputStream in = loader.getResourceAsStream(name);
 
-    Preconditions.checkArgument(resourceAsStream != null, "resource %s not found.", resourceName);
+    Objects.requireNonNull(in, String.format("resource not found: %s", name));
 
-    return new BufferedReader(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
+    return new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
   }
 }
