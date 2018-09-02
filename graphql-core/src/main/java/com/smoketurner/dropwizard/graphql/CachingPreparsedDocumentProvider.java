@@ -38,6 +38,7 @@ public class CachingPreparsedDocumentProvider implements PreparsedDocumentProvid
    * Constructor
    *
    * @param spec Specification for the cache
+   * @param registry Metric registry
    */
   public CachingPreparsedDocumentProvider(CacheBuilderSpec spec, MetricRegistry registry) {
     LOGGER.info("Query Cache: {}", spec);
