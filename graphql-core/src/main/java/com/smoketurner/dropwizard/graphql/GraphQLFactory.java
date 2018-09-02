@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
+import com.google.common.cache.CacheBuilderSpec;
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.execution.AsyncSerialExecutionStrategy;
 import graphql.execution.ExecutionStrategy;
@@ -61,9 +62,11 @@ public class GraphQLFactory {
 
   private boolean enableTracing = true;
 
-  private List<Instrumentation> instrumentations = new ArrayList<>();
+  @NotNull private CacheBuilderSpec queryCache = CacheBuilderSpec.disableCaching();
 
-  private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
+  @NotNull private List<Instrumentation> instrumentations = new ArrayList<>();
+
+  @NotNull private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
 
   @Deprecated
   @JsonProperty
@@ -126,6 +129,16 @@ public class GraphQLFactory {
     if (enabled) {
       instrumentations.add(new TracingInstrumentation());
     }
+  }
+
+  @JsonProperty
+  public CacheBuilderSpec getQueryCache() {
+    return queryCache;
+  }
+
+  @JsonProperty
+  public void setQueryCache(String queryCache) {
+    this.queryCache = CacheBuilderSpec.parse(queryCache);
   }
 
   @JsonIgnore

@@ -19,6 +19,7 @@ defaultName: Stranger
 
 graphql:
   enableTracing: false
+  queryCache: maximumSize=10000
   schemaFiles:
   - HelloWorld.graphql
 
