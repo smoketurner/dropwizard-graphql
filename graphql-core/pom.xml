@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.smoketurner.dropwizard</groupId>
         <artifactId>dropwizard-graphql</artifactId>
-        <version>1.3.7-3</version>
+        <version>1.3.7-4-SNAPSHOT</version>
     </parent>
 
     <artifactId>graphql-core</artifactId>
