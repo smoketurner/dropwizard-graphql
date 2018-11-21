@@ -17,8 +17,8 @@ package com.smoketurner.dropwizard.graphql;
 
 import graphql.execution.preparsed.PreparsedDocumentProvider;
 import graphql.schema.GraphQLSchema;
+import graphql.servlet.GraphQLHttpServlet;
 import graphql.servlet.GraphQLQueryInvoker;
-import graphql.servlet.SimpleGraphQLHttpServlet;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.assets.AssetsBundle;
@@ -48,8 +48,10 @@ public abstract class GraphQLBundle<C extends Configuration>
             .withInstrumentation(factory.getInstrumentations())
             .build();
 
-    final SimpleGraphQLHttpServlet servlet =
-        SimpleGraphQLHttpServlet.newBuilder(schema).withQueryInvoker(queryInvoker).build();
+    final graphql.servlet.GraphQLConfiguration config =
+        graphql.servlet.GraphQLConfiguration.with(schema).with(queryInvoker).build();
+
+    final GraphQLHttpServlet servlet = GraphQLHttpServlet.with(config);
 
     environment.servlets().addServlet("graphql", servlet).addMapping("/graphql", "/schema.json");
   }
