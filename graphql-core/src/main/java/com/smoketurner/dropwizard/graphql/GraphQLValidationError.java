@@ -15,12 +15,12 @@
  */
 package com.smoketurner.dropwizard.graphql;
 
-import java.util.List;
-import javax.annotation.Nullable;
 import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
 import graphql.schema.DataFetcher;
+import java.util.List;
+import javax.annotation.Nullable;
 
 /**
  * Generic class to return a validation error message to the user from a {@link DataFetcher} without
