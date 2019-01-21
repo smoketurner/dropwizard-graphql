@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Smoke Turner, LLC (github@smoketurner.com)
+ * Copyright © 2019 Smoke Turner, LLC (github@smoketurner.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -160,8 +160,7 @@ public class GraphQLFactory {
     }
 
     if (!schemaFiles.isEmpty()) {
-      schemaFiles
-          .stream()
+      schemaFiles.stream()
           .filter(f -> !Strings.isNullOrEmpty(f))
           .map(f -> getResourceAsReader(f))
           .map(r -> parser.parse(r))
