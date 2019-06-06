@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
@@ -68,7 +69,7 @@ public class GraphQLFactory {
 
   @NotNull private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
 
-  private GraphQLSchema graphQLSchema;
+  private Optional<GraphQLSchema> graphQLSchema = Optional.empty();
 
   @Deprecated
   @JsonProperty
@@ -133,14 +134,14 @@ public class GraphQLFactory {
     }
   }
 
-  @JsonProperty
-  public GraphQLSchema getGraphQLSchema() {
+  @JsonIgnore
+  public Optional<GraphQLSchema> getGraphQLSchema() {
     return graphQLSchema;
   }
 
-  @JsonProperty
-  public void setGraphQLSchema(GraphQLSchema graphQLSchema) {
-    this.graphQLSchema = graphQLSchema;
+  @JsonIgnore
+  public void setGraphQLSchema(@Nullable GraphQLSchema graphQLSchema) {
+    this.graphQLSchema = Optional.ofNullable(graphQLSchema);
   }
 
   @JsonProperty
@@ -159,11 +160,15 @@ public class GraphQLFactory {
   }
 
   @JsonIgnore
-  public void setInstrumentations(List<Instrumentation> instrumentations) {
+  public void setInstrumentations(@Nullable List<Instrumentation> instrumentations) {
     this.instrumentations = Optional.ofNullable(instrumentations).orElseGet(ArrayList::new);
   }
 
   public GraphQLSchema build() throws SchemaProblem {
+    if (graphQLSchema.isPresent()) {
+      return graphQLSchema.get();
+    }
+
     final SchemaParser parser = new SchemaParser();
     final TypeDefinitionRegistry registry = new TypeDefinitionRegistry();
 
@@ -180,12 +185,8 @@ public class GraphQLFactory {
     }
 
     final SchemaGenerator generator = new SchemaGenerator();
-    if (registry.schemaDefinition().isPresent()) {
-      final GraphQLSchema schema = generator.makeExecutableSchema(registry, runtimeWiring);
-      return schema;
-    }
-
-    return getGraphQLSchema();
+    final GraphQLSchema schema = generator.makeExecutableSchema(registry, runtimeWiring);
+    return schema;
   }
 
   /**
