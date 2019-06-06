@@ -54,7 +54,7 @@ public class GraphQLFactory {
   /** @deprecated Please use {@link schemaFiles} instead */
   @Deprecated() private String schemaFile = "";
 
-  @NotNull private List<String> schemaFiles = new ArrayList<>();
+  private List<String> schemaFiles = new ArrayList<>();
 
   @NotEmpty
   @OneOf({"async", "async_serial", "subscription"})
@@ -67,6 +67,8 @@ public class GraphQLFactory {
   @NotNull private List<Instrumentation> instrumentations = new ArrayList<>();
 
   @NotNull private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
+
+  private GraphQLSchema graphQLSchema;
 
   @Deprecated
   @JsonProperty
@@ -132,6 +134,16 @@ public class GraphQLFactory {
   }
 
   @JsonProperty
+  public GraphQLSchema getGraphQLSchema() {
+    return graphQLSchema;
+  }
+
+  @JsonProperty
+  public void setGraphQLSchema(GraphQLSchema graphQLSchema) {
+    this.graphQLSchema = graphQLSchema;
+  }
+
+  @JsonProperty
   public CacheBuilderSpec getQueryCache() {
     return queryCache;
   }
@@ -168,8 +180,12 @@ public class GraphQLFactory {
     }
 
     final SchemaGenerator generator = new SchemaGenerator();
-    final GraphQLSchema schema = generator.makeExecutableSchema(registry, runtimeWiring);
-    return schema;
+    if (registry.schemaDefinition().isPresent()) {
+      final GraphQLSchema schema = generator.makeExecutableSchema(registry, runtimeWiring);
+      return schema;
+    }
+
+    return getGraphQLSchema();
   }
 
   /**
