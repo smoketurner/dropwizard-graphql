@@ -20,6 +20,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheBuilderSpec;
+import graphql.ExecutionInput;
 import graphql.execution.preparsed.PreparsedDocumentEntry;
 import graphql.execution.preparsed.PreparsedDocumentProvider;
 import java.util.concurrent.ExecutionException;
@@ -49,15 +50,19 @@ public class CachingPreparsedDocumentProvider implements PreparsedDocumentProvid
   }
 
   @Override
-  public PreparsedDocumentEntry get(
-      String query, Function<String, PreparsedDocumentEntry> compute) {
+  public PreparsedDocumentEntry getDocument(
+      ExecutionInput executionInput,
+      Function<ExecutionInput, PreparsedDocumentEntry> computeFunction) {
+
+    final String query = executionInput.getQuery();
 
     try {
       return cache.get(
           query,
           () -> {
+            LOGGER.debug("Query cache miss: {}", query);
             cacheMisses.mark();
-            return compute.apply(query);
+            return computeFunction.apply(executionInput);
           });
 
     } catch (ExecutionException e) {
@@ -65,6 +70,6 @@ public class CachingPreparsedDocumentProvider implements PreparsedDocumentProvid
     }
 
     // NO-OP
-    return compute.apply(query);
+    return computeFunction.apply(executionInput);
   }
 }

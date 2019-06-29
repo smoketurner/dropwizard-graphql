@@ -1,5 +1,5 @@
 <!--
- *  Copyright (c) Facebook, Inc.
+ *  Copyright (c) 2019 GraphQL Contributors
  *  All rights reserved.
  *
  *  This source code is licensed under the license found in the
@@ -37,8 +37,8 @@
       copy them directly into your environment, or perhaps include them in your
       favored resource bundler.
      -->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphiql@0.13.0/graphiql.css" />
-    <script src="//cdn.jsdelivr.net/npm/graphiql@0.13.0/graphiql.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphiql@0.13.2/graphiql.css" />
+    <script src="//cdn.jsdelivr.net/npm/graphiql@0.13.2/graphiql.min.js" charset="utf-8"></script>
 
   </head>
   <body>
@@ -107,9 +107,12 @@
       // use fetch, and could instead implement graphQLFetcher however you like,
       // as long as it returns a Promise or Observable.
       function graphQLFetcher(graphQLParams) {
-        // This example expects a GraphQL server at the path /graphql.
+        // When working locally, the example expects a GraphQL server at the path /graphql.
+        // In a PR preview, it connects to the Star Wars API externally.
         // Change this to point wherever you host your GraphQL server.
-        return fetch('/graphql', {
+        const isDev = !window.location.hostname.match(/(^|\.)netlify\.com$|(^|\.)graphql\.org$/)
+        const api = isDev ? '/graphql' : 'https://swapi.graph.cool/'
+        return fetch(api, {
           method: 'post',
           headers: {
             'Accept': 'application/json',
