@@ -44,7 +44,7 @@ logging:
   loggers:
     com.smoketurner.dropwizard.graphql: DEBUG
     com.example.helloworld: DEBUG
-    graphql: DEBUG
+    graphql: INFO
   appenders:
     - type: console
       timeZone: UTC

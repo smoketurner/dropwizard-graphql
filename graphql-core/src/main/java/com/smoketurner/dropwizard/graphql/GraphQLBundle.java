@@ -30,7 +30,7 @@ public abstract class GraphQLBundle<C extends Configuration>
 
   @Override
   public void initialize(Bootstrap<?> bootstrap) {
-    bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.htm", "graphiql"));
+    bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.htm", "graphql-playground"));
   }
 
   @Override
