@@ -43,17 +43,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nullable;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GraphQLFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLFactory.class);
-
-  /** @deprecated Please use {@link schemaFiles} instead */
-  @Deprecated() private String schemaFile = "";
 
   private List<String> schemaFiles = new ArrayList<>();
 
@@ -70,18 +67,6 @@ public class GraphQLFactory {
   @NotNull private RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring().build();
 
   private Optional<GraphQLSchema> graphQLSchema = Optional.empty();
-
-  @Deprecated
-  @JsonProperty
-  public String getSchemaFile() {
-    return schemaFile;
-  }
-
-  @Deprecated
-  @JsonProperty
-  public void setSchemaFile(final String file) {
-    schemaFile = file;
-  }
 
   @JsonProperty
   public List<String> getSchemaFiles() {
@@ -171,10 +156,6 @@ public class GraphQLFactory {
 
     final SchemaParser parser = new SchemaParser();
     final TypeDefinitionRegistry registry = new TypeDefinitionRegistry();
-
-    if (!Strings.isNullOrEmpty(schemaFile)) {
-      schemaFiles.add(schemaFile);
-    }
 
     if (!schemaFiles.isEmpty()) {
       schemaFiles.stream()
