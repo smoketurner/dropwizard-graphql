@@ -13,13 +13,13 @@ Dependency Info
 <dependency>
     <groupId>com.smoketurner.dropwizard</groupId>
     <artifactId>graphql-core</artifactId>
-    <version>1.3.15-1</version>
+    <version>2.0.7-1</version>
 </dependency>
 ```
 
 Usage
 -----
-Add a `GraphQLBundle` to your [Application](https://www.dropwizard.io/1.3.12/dropwizard-core/apidocs/io/dropwizard/Application.html) class.
+Add a `GraphQLBundle` to your [Application](https://javadoc.io/doc/io.dropwizard/dropwizard-project/latest/io/dropwizard/Application.html) class.
 
 ```java
 @Override
@@ -42,13 +42,13 @@ public void initialize(Bootstrap<MyConfiguration> bootstrap) {
 
 Example Application
 -------------------
-This bundle includes a modified version of the `HelloWorldApplication` from Dropwizard's [Getting Started](https://www.dropwizard.io/1.3.12/docs/getting-started.html) documentation.
+This bundle includes a modified version of the `HelloWorldApplication` from Dropwizard's [Getting Started](https://www.dropwizard.io/en/latest/getting-started.html) documentation.
 
 You can execute this application on your local machine then running:
 
 ```
 ./mvnw clean package
-java -jar graphql-example/target/graphql-example-1.3.15-2-SNAPSHOT.jar server graphql-example/hello-world.yml
+java -jar graphql-example/target/graphql-example-2.0.7-2-SNAPSHOT.jar server graphql-example/hello-world.yml
 ```
 
 This will start the application on port `8080` with a [GraphQL Playground](https://github.com/prisma-labs/graphql-playground) interface for exploring the API.
@@ -59,7 +59,7 @@ Please file bug reports and feature requests in [GitHub issues](https://github.c
 
 License
 -------
-Copyright (c) 2019 Smoke Turner, LLC
+Copyright (c) 2020 Smoke Turner, LLC
 
 This library is licensed under the Apache License, Version 2.0.
 
