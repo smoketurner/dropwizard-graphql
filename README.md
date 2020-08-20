@@ -39,6 +39,62 @@ public void initialize(Bootstrap<MyConfiguration> bootstrap) {
     bootstrap.addBundle(bundle);
 }
 ```
+## Adding GraphQL along with REST API Endpoints in Dropwizard
+To use GraphQL along with REST APIs in dropwizard you need to change the root path in the bundle which we add
+in the main class of dropwizard. Otherwise the bundle may conflict with root path of REST API's.
+
+You need to add the root path by overiding the ```initialize``` method in GraphQL bundle.
+```
+@Override
+  public void initialize(Bootstrap<?> bootstrap) {
+    bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.htm", "graphql-playground"));
+  }
+``` 
+This is the default ```initialize``` method in GraphQL bundle.
+If you want to expose your GraphQL endpoint at ``localhost:8080/graphql`` then you have to change
+the path in the ```AssetBundle``` constructor.
+
+Now the overriden method which we add while adding bundle is 
+
+```
+@Override
+  public void initialize(Bootstrap<?> bootstrap) {
+    bootstrap.addBundle(new AssetsBundle("/assets", "/graphql", "index.htm", "graphql-playground"));
+    //graphql is the endpoint which is concerned with graphql
+  }
+```  
+This avoids conflict between REST API and GraphQL endpoints.
+
+When we start the dropwizard server the GraphQL playground looks for GraphQL schema.GraphQL dropwizard creates a 
+schema.json file after processing our GraphQL schema. The GraphQL playground looks out for this schema. It looks out 
+at ```/graphql``` from the GraphQL endpoint.If you wish to change where the GraphQL playground looks for this schema file
+then you may override the ```run``` method in GraphQL bundle class.
+
+If we want our schema.json to be available at ```localhost:8080/graphql/query``` then the overridden method should like this.
+```
+@Override
+  public void run(final C configuration, final Environment environment) throws Exception {
+    final GraphQLFactory factory = getGraphQLFactory(configuration);
+
+    final PreparsedDocumentProvider provider =
+        new CachingPreparsedDocumentProvider(factory.getQueryCache(), environment.metrics());
+
+    final GraphQLSchema schema = factory.build();
+
+    final GraphQLQueryInvoker queryInvoker =
+        GraphQLQueryInvoker.newBuilder()
+            .withPreparsedDocumentProvider(provider)
+            .withInstrumentation(factory.getInstrumentations())
+            .build();
+
+    final graphql.kickstart.servlet.GraphQLConfiguration config =
+        graphql.kickstart.servlet.GraphQLConfiguration.with(schema).with(queryInvoker).build();
+
+    final GraphQLHttpServlet servlet = GraphQLHttpServlet.with(config);
+
+    environment.servlets().addServlet("graphql", servlet).addMapping("/query", "/schema.json");
+  }
+```
 
 Example Application
 -------------------
