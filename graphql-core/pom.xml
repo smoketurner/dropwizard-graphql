@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphql-java-servlet</artifactId>
-            <version>10.0.0</version>
+            <version>10.1.0</version>
         </dependency>
     </dependencies>
 </project>
