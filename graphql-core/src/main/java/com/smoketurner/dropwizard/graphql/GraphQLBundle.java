@@ -19,12 +19,11 @@ import graphql.execution.preparsed.PreparsedDocumentProvider;
 import graphql.kickstart.execution.GraphQLQueryInvoker;
 import graphql.kickstart.servlet.GraphQLHttpServlet;
 import graphql.schema.GraphQLSchema;
-import io.dropwizard.Configuration;
-import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.assets.AssetsBundle;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import javax.servlet.Servlet;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 
 public abstract class GraphQLBundle<C extends Configuration>
     implements ConfiguredBundle<C>, GraphQLConfiguration<C> {
@@ -54,9 +53,6 @@ public abstract class GraphQLBundle<C extends Configuration>
 
     final GraphQLHttpServlet servlet = GraphQLHttpServlet.with(config);
 
-    environment
-        .servlets()
-        .addServlet("graphql", (Servlet) servlet)
-        .addMapping("/graphql", "/schema.json");
+    environment.servlets().addServlet("graphql", servlet).addMapping("/graphql", "/schema.json");
   }
 }

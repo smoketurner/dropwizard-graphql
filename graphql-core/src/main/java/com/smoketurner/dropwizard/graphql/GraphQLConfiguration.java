@@ -15,7 +15,7 @@
  */
 package com.smoketurner.dropwizard.graphql;
 
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 
 @FunctionalInterface
 public interface GraphQLConfiguration<C extends Configuration> {

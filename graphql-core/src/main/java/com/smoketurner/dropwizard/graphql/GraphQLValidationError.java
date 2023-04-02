@@ -20,7 +20,7 @@ import graphql.GraphQLError;
 import graphql.language.SourceLocation;
 import graphql.schema.DataFetcher;
 import java.util.List;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Generic class to return a validation error message to the user from a {@link DataFetcher} without
