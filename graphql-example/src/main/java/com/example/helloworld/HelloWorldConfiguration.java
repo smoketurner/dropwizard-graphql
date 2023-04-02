@@ -18,9 +18,9 @@ package com.example.helloworld;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
 import io.dropwizard.core.Configuration;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class HelloWorldConfiguration extends Configuration {
 

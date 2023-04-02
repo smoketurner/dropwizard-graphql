@@ -24,9 +24,9 @@ import graphql.schema.idl.RuntimeWiring;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.FilterRegistration;
 import java.util.EnumSet;
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 public class HelloWorldApplication extends Application<HelloWorldConfiguration> {
