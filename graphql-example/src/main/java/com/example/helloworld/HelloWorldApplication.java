@@ -19,6 +19,7 @@ import com.example.helloworld.api.SayingDataFetcher;
 import com.example.helloworld.resources.HelloWorldResource;
 import com.smoketurner.dropwizard.graphql.GraphQLBundle;
 import com.smoketurner.dropwizard.graphql.GraphQLFactory;
+import graphql.scalars.ExtendedScalars;
 import graphql.schema.idl.RuntimeWiring;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -77,6 +78,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
     final RuntimeWiring wiring =
         RuntimeWiring.newRuntimeWiring()
             .type("Query", typeWiring -> typeWiring.dataFetcher("saying", fetcher))
+            .scalar(ExtendedScalars.GraphQLLong)
             .build();
 
     return wiring;

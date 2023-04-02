@@ -10,3 +10,5 @@ type Saying {
     id: Long!
     content: String!
 }
+
+scalar Long

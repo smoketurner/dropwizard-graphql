@@ -24,6 +24,7 @@ import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import javax.servlet.Servlet;
 
 public abstract class GraphQLBundle<C extends Configuration>
     implements ConfiguredBundle<C>, GraphQLConfiguration<C> {
@@ -53,6 +54,9 @@ public abstract class GraphQLBundle<C extends Configuration>
 
     final GraphQLHttpServlet servlet = GraphQLHttpServlet.with(config);
 
-    environment.servlets().addServlet("graphql", servlet).addMapping("/graphql", "/schema.json");
+    environment
+        .servlets()
+        .addServlet("graphql", (Servlet) servlet)
+        .addMapping("/graphql", "/schema.json");
   }
 }
